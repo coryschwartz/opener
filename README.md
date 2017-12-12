@@ -4,7 +4,7 @@ The server listens on a TCP socket.
 When it receives a connection, it copies from the socket into a temp file,
 and then opens it.
 
-The client connects to the unix socket, and copies files into the socket.
+The client connects to the socket, and copies files into the socket.
 
 
 The problem it solves is file viewing on remote servers.
