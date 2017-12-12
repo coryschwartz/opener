@@ -1,9 +1,6 @@
-from socketserver import UnixStreamServer,  StreamRequestHandler
-from subprocess import call
-from sys import argv
-from threading import Thread
+from socketserver import TCPServer,  StreamRequestHandler
 from tempfile import NamedTemporaryFile
-from time import sleep
+import webbrowser
 
 
 class CopyOpener(StreamRequestHandler):
@@ -14,9 +11,9 @@ class CopyOpener(StreamRequestHandler):
         if not buf:
           break
         f.write(buf)
-      call(['xdg-open', f.name])
+    webbrowser.open_new_tab('file://' + f.name)
 
 
-def run(socket_file):
-  with UnixStreamServer(socket_file, CopyOpener) as server:
+def run(port_number):
+  with TCPServer(('127.0.0.1', port_number), CopyOpener) as server:
     server.serve_forever()

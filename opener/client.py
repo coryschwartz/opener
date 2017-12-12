@@ -1,15 +1,10 @@
 from sys import argv, stdin
 import socket
 
-class SocketConnection(Exception):
-  pass
 
-def copy(f, socket_path):
-    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
-      try:
-        sock.connect(socket_path)
-      except:
-        raise SocketConnection
+def copy(f, port_number):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+      sock.connect(('127.0.0.1', port_number))
       while True:
         buf = f.read(4096)
         if not buf:
