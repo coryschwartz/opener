@@ -9,23 +9,21 @@ parser.add_argument('--port', help='Server Port number', type=int, default='1098
 parser.add_argument('--server', help='start in server mode instead', action='store_true')
 parser.add_argument('infile', nargs='*', type=argparse.FileType('rb'))
 
-def cleanup(socket_file):
-  def inner(signum, frame):
-    sys.exit()
-  return inner
+def cleanup(signum, frame):
+  sys.exit()
 
 def main():
   parsed = parser.parse_args()
   if parsed.server:
-    signal.signal(signal.SIGTERM, cleanup(parsed.port))
-    signal.signal(signal.SIGHUP, cleanup(parsed.port))
-    signal.signal(signal.SIGINT, cleanup(parsed.port))
+    signal.signal(signal.SIGTERM, cleanup)
+    signal.signal(signal.SIGHUP, cleanup)
+    signal.signal(signal.SIGINT, cleanup)
     server.run(parsed.port)
   else:
     if isinstance(parsed.infile, list):
       files = parsed.infile
     else:
-      files = [parsed]
+      files = [parsed.infile]
     if not files:
       files = [sys.stdin.buffer]
     try:
